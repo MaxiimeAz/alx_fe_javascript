@@ -5,27 +5,17 @@ let quotes = [
     { text: "Get busy living or get busy dying.", category: "Motivation" }
 ];
 
-// Function to display a random quote
-function displayRandomQuote() {
+// Function to show a random quote
+function showRandomQuote() {
     // Select a random quote from the array
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const quote = quotes[randomIndex];
 
     // Get the quote display element
     const quoteDisplay = document.getElementById('quoteDisplay');
-    quoteDisplay.textContent = ""; // Clear previous quote
 
-    // Create elements for the new quote
-    const quoteText = document.createElement('p');
-    const quoteCategory = document.createElement('span');
-
-    // Set the text content
-    quoteText.textContent = quote.text;
-    quoteCategory.textContent = ` - ${quote.category}`;
-
-    // Append the quote text and category to the quote display
-    quoteDisplay.appendChild(quoteText);
-    quoteDisplay.appendChild(quoteCategory);
+    // Update the display using innerHTML
+    quoteDisplay.innerHTML = `<p>${quote.text}</p><span> - ${quote.category}</span>`;
 }
 
 // Function to add a new quote
@@ -47,12 +37,12 @@ function addQuote() {
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
 
-    // Optionally display the newly added quote
-    displayRandomQuote();
+    // Show a new random quote after adding
+    showRandomQuote();
 }
 
 // Event listener for the button to show a new quote
-document.getElementById('newQuote').addEventListener('click', displayRandomQuote);
+document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
-// Show an initial random quote when the page loads
-document.addEventListener('DOMContentLoaded', displayRandomQuote);
+// Event listener for DOMContentLoaded to show an initial random quote when the page loads
+document.addEventListener('DOMContentLoaded', showRandomQuote);
