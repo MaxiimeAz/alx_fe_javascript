@@ -54,16 +54,21 @@ function filterQuotes() {
 }
 
 // Function to add a new quote
-function addQuote() {
+async function addQuote() {
     const quoteText = document.getElementById('newQuoteText').value;
     const quoteCategory = document.getElementById('newQuoteCategory').value;
 
     if (quoteText && quoteCategory) {
         const newQuote = { text: quoteText, category: quoteCategory };
+        
+        // Save quote locally first
         quotes.push(newQuote);
         saveQuotes();
         populateCategories(); // Update categories dropdown
         displayQuotes(); // Display updated quotes
+
+        // Send the new quote to the simulated server
+        await postQuoteToServer(newQuote);
     }
 }
 
@@ -107,6 +112,27 @@ function mergeQuotes(serverQuotes) {
     quotes = newQuotes;
     saveQuotes();
     displayQuotes(); // Refresh display
+}
+
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(serverUrl, {
+            method: 'POST', // HTTP method
+            headers: {
+                'Content-Type': 'application/json' // Specify content type
+            },
+            body: JSON.stringify(quote) // Convert quote object to JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to post quote to server');
+        }
+        const result = await response.json();
+        console.log('Posted quote to server:', result);
+    } catch (error) {
+        console.error('Error posting quote to server:', error);
+    }
 }
 
 // Function to notify the user about updates
