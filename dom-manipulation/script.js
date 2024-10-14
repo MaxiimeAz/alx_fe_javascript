@@ -153,6 +153,7 @@ function notifyUser(message) {
 // Function to sync quotes with the server
 async function syncQuotes() {
     await fetchQuotesFromServer(); // Fetch updates from the server
+    alert("Quotes synced with server!"); // Notify user about sync
 }
 
 // Function to periodically fetch quotes
