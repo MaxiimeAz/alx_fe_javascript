@@ -47,15 +47,12 @@ function addQuote() {
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
 
-    // Display the newly added quote
+    // Optionally display the newly added quote
     displayRandomQuote();
 }
 
 // Event listener for the button to show a new quote
 document.getElementById('newQuote').addEventListener('click', displayRandomQuote);
 
-// Event listener for the button to add a new quote
-document.getElementById('addQuoteBtn').addEventListener('click', addQuote);
-
 // Show an initial random quote when the page loads
-document.add
+document.addEventListener('DOMContentLoaded', displayRandomQuote);
