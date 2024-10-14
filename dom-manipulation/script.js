@@ -10,9 +10,22 @@ function showRandomQuote() {
     // Select a random quote from the array
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const quote = quotes[randomIndex];
+
     // Update the quote display
     const quoteDisplay = document.getElementById('quoteDisplay');
-    quoteDisplay.textContent = `${quote.text} - ${quote.category}`;
+    quoteDisplay.textContent = ""; // Clear previous quote
+
+    // Create elements for the new quote
+    const quoteText = document.createElement('p');
+    const quoteCategory = document.createElement('span');
+
+    // Set the text content
+    quoteText.textContent = quote.text;
+    quoteCategory.textContent = ` - ${quote.category}`;
+
+    // Append the quote text and category to the quote display
+    quoteDisplay.appendChild(quoteText);
+    quoteDisplay.appendChild(quoteCategory);
 }
 
 // Function to add a new quote
