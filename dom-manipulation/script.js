@@ -150,10 +150,15 @@ function notifyUser(message) {
     }, 5000); // Remove notification after 5 seconds
 }
 
+// Function to sync quotes with the server
+async function syncQuotes() {
+    await fetchQuotesFromServer(); // Fetch updates from the server
+}
+
 // Function to periodically fetch quotes
 function startFetching() {
-    fetchQuotesFromServer(); // Fetch immediately
-    setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+    syncQuotes(); // Fetch immediately
+    setInterval(syncQuotes, 30000); // Fetch every 30 seconds
 }
 
 // Load quotes when the DOM content is loaded
