@@ -1,5 +1,7 @@
-// Initialize an array to hold quotes
 let quotes = [];
+
+// Simulated server URL (for demonstration, using JSONPlaceholder)
+const serverUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 // Function to load quotes from local storage on page load
 function loadQuotes() {
@@ -28,6 +30,9 @@ function displayQuotes(category = 'all') {
 function populateCategories() {
     const categoryFilter = document.getElementById('categoryFilter');
     const categories = [...new Set(quotes.map(quote => quote.category))]; // Extract unique categories
+    categoryFilter.innerHTML = ''; // Clear existing options
+    categoryFilter.appendChild(new Option('All Categories', 'all'));
+
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
@@ -67,5 +72,66 @@ function saveQuotes() {
     localStorage.setItem('quotes', JSON.stringify(quotes));
 }
 
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(serverUrl);
+        const data = await response.json();
+        const serverQuotes = data.slice(0, 5).map(item => ({
+            text: item.title,
+            category: item.userId.toString() // Simulating category as userId for demonstration
+        }));
+
+        mergeQuotes(serverQuotes);
+    } catch (error) {
+        console.error('Error fetching quotes from server:', error);
+    }
+}
+
+// Function to merge quotes and handle conflicts
+function mergeQuotes(serverQuotes) {
+    const newQuotes = [...quotes]; // Create a copy of local quotes
+
+    serverQuotes.forEach(serverQuote => {
+        const existingQuoteIndex = newQuotes.findIndex(localQuote => localQuote.text === serverQuote.text);
+
+        if (existingQuoteIndex === -1) {
+            newQuotes.push(serverQuote); // If not found, add from server
+        } else {
+            // If found, conflict resolution: prefer server quote
+            newQuotes[existingQuoteIndex] = serverQuote;
+            notifyUser('Quote updated from server: ' + serverQuote.text); // Notify user
+        }
+    });
+
+    quotes = newQuotes;
+    saveQuotes();
+    displayQuotes(); // Refresh display
+}
+
+// Function to notify the user about updates
+function notifyUser(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.backgroundColor = 'lightblue';
+    notification.style.padding = '10px';
+    notification.style.margin = '10px 0';
+    notification.style.border = '1px solid blue';
+    document.body.prepend(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 5000); // Remove notification after 5 seconds
+}
+
+// Function to periodically fetch quotes
+function startFetching() {
+    fetchQuotesFromServer(); // Fetch immediately
+    setInterval(fetchQuotesFromServer, 30000); // Fetch every 30 seconds
+}
+
 // Load quotes when the DOM content is loaded
-document.addEventListener('DOMContentLoaded', loadQuotes);
+document.addEventListener('DOMContentLoaded', () => {
+    loadQuotes();
+    startFetching(); // Start periodic fetching
+});
