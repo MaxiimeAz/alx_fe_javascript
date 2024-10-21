@@ -33,7 +33,7 @@ function showRandomQuote() {
 }
 
 // Add a new quote
-function addQuote(event) {
+async function addQuote(event) {
     event.preventDefault(); // Prevent the form from submitting
     const newQuoteText = document.getElementById('newQuoteText').value;
     const newQuoteCategory = document.getElementById('newQuoteCategory').value;
@@ -41,9 +41,31 @@ function addQuote(event) {
     const newQuote = { text: newQuoteText, category: newQuoteCategory };
     quotes.push(newQuote);
     saveQuotes();
+    await postQuoteToServer(newQuote); // Optional: Send new quote to the server
     populateCategories();
     document.getElementById('quoteForm').reset();
     showRandomQuote();
+}
+
+// Post the new quote to the server (for demonstration purposes)
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST', // HTTP method
+            headers: {
+                'Content-Type': 'application/json' // Specify the content type
+            },
+            body: JSON.stringify(quote) // Convert the quote object to JSON
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json(); // Assuming the server returns the posted quote
+        console.log('Quote posted to server:', data);
+    } catch (error) {
+        console.error('Error posting quote to server:', error);
+    }
 }
 
 // Populate category dropdown
