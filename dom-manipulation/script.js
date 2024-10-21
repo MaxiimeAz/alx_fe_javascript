@@ -7,6 +7,7 @@ async function initialize() {
     populateCategories();
     filterQuotes();
     fetchQuotesFromServer();
+    syncQuotes(); // Start syncing quotes with the server
 }
 
 // Load existing quotes from local storage
@@ -68,6 +69,33 @@ async function postQuoteToServer(quote) {
     }
 }
 
+// Sync quotes with the server
+async function syncQuotes() {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Simulated API endpoint
+        const serverQuotes = await response.json();
+        
+        // For demonstration, assume each server quote has a title
+        const newQuotes = serverQuotes.map(post => ({
+            text: post.title, // Using post title as quote text
+            category: 'fetched' // Assign a static category for demonstration
+        }));
+
+        // Merge new quotes with existing quotes, avoiding duplicates
+        newQuotes.forEach(newQuote => {
+            if (!quotes.some(quote => quote.text === newQuote.text)) {
+                quotes.push(newQuote);
+            }
+        });
+
+        saveQuotes();
+        populateCategories();
+        showRandomQuote();
+    } catch (error) {
+        console.error('Error syncing quotes:', error);
+    }
+}
+
 // Populate category dropdown
 function populateCategories() {
     const categoryFilter = document.getElementById('categoryFilter');
@@ -121,24 +149,10 @@ function exportToJsonFile() {
     document.body.removeChild(a);
 }
 
-// Fetch quotes from the server
+// Fetch quotes from the server at intervals
 async function fetchQuotesFromServer() {
     setInterval(async () => {
-        try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Simulated API endpoint
-            const data = await response.json();
-            // Simulate adding new quotes from the server
-            const newQuotes = data.map(post => ({
-                text: post.title,  // Using post title as quote text
-                category: 'fetched' // Assign a static category for demonstration
-            }));
-            quotes.push(...newQuotes);
-            saveQuotes();
-            populateCategories();
-            showRandomQuote();
-        } catch (error) {
-            console.error('Error fetching quotes:', error);
-        }
+        await syncQuotes(); // Sync quotes periodically
     }, 30000); // Fetch every 30 seconds
 }
 
