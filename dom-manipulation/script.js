@@ -10,15 +10,21 @@ const quoteDisplay = document.getElementById('quoteDisplay');
 const newQuoteButton = document.getElementById('newQuote');
 const quoteForm = document.getElementById('quoteForm');
 
-
+// Function to display a random quote
 function showRandomQuote() {
   if (quotes.length === 0) {
-    quoteDisplay.textContent = "No quotes available. Please add one!";
+    quoteDisplay.innerHTML = "<p>No quotes available. Please add one!</p>";
     return;
   }
+
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[randomIndex];
-  quoteDisplay.textContent = `"${randomQuote.text}" — ${randomQuote.category}`;
+
+  // Use innerHTML to display the quote
+  quoteDisplay.innerHTML = `
+    <p>"${randomQuote.text}"</p>
+    <p><em>— ${randomQuote.category}</em></p>
+  `;
 }
 
 // Event listener to show a random quote when the button is clicked
@@ -30,26 +36,4 @@ function addQuote(event) {
 
   // Get input values
   const newQuoteText = document.getElementById('newQuoteText').value.trim();
-  const newQuoteCategory = document.getElementById('newQuoteCategory').value.trim();
-
-  // Validate input
-  if (newQuoteText === "" || newQuoteCategory === "") {
-    alert("Both quote and category are required!");
-    return;
-  }
-
-  // Add new quote to the array
-  quotes.push({ text: newQuoteText, category: newQuoteCategory });
-
-  // Reset form inputs
-  quoteForm.reset();
-
-  // Provide feedback to the user
-  alert("Quote added successfully!");
-
-  // Optionally show the newly added quote
-  quoteDisplay.textContent = `"${newQuoteText}" — ${newQuoteCategory}`;
-}
-
-// Event listener for form submission
-quoteForm.addEventListener('submit', addQuote);
+  const newQuoteCategory 
