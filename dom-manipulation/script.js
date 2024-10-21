@@ -1,5 +1,11 @@
- // Sample quotes array to hold quote objects
-let quotes = [];
+// Sample quotes array to hold quote objects
+let quotes = [
+    { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", category: "Motivation" },
+    { text: "The way to get started is to quit talking and begin doing.", category: "Inspiration" },
+    { text: "Life is what happens when you're busy making other plans.", category: "Wisdom" },
+    { text: "You only live once, but if you do it right, once is enough.", category: "Life" },
+    { text: "The purpose of our lives is to be happy.", category: "Happiness" }
+];
 
 // Initialize the application
 async function initialize() {
