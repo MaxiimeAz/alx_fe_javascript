@@ -8,7 +8,6 @@ let quotes = [
 // Select DOM elements
 const quoteDisplay = document.getElementById('quoteDisplay');
 const newQuoteButton = document.getElementById('newQuote');
-const quoteForm = document.getElementById('quoteForm');
 
 // Function to display a random quote
 function showRandomQuote() {
@@ -20,20 +19,15 @@ function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[randomIndex];
 
-  // Use innerHTML to display the quote
   quoteDisplay.innerHTML = `
     <p>"${randomQuote.text}"</p>
     <p><em>— ${randomQuote.category}</em></p>
   `;
 }
 
-// Event listener to show a random quote when the button is clicked
-newQuoteButton.addEventListener('click', showRandomQuote);
-
-// Function to add a new quote from the form input
-function addQuote(event) {
-  event.preventDefault(); // Prevent form from refreshing the page
-
-  // Get input values
-  const newQuoteText = document.getElementById('newQuoteText').value.trim();
-  const newQuoteCategory 
+// Create the form to add new quotes dynamically
+function createAddQuoteForm() {
+  const formContainer = document.createElement('div');
+  formContainer.innerHTML = `
+    <form id="quoteForm">
+      <input id="newQuoteText" type="
