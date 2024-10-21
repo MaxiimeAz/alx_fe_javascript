@@ -1,4 +1,4 @@
-// Sample quotes array to hold quote objects
+ // Sample quotes array to hold quote objects
 let quotes = [];
 
 // Initialize the application
@@ -40,7 +40,6 @@ function createAddQuoteForm() {
 
     const form = document.createElement('form');
     form.id = 'quoteForm';
-    form.onsubmit = (event) => addQuote(event);
 
     const quoteInput = document.createElement('input');
     quoteInput.id = 'newQuoteText';
@@ -62,6 +61,9 @@ function createAddQuoteForm() {
     form.appendChild(categoryInput);
     form.appendChild(addButton);
     formContainer.appendChild(form);
+
+    // Add event listener for form submission
+    form.addEventListener('submit', (event) => addQuote(event));
 }
 
 // Add a new quote
