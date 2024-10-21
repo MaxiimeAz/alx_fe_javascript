@@ -1,16 +1,16 @@
-
+// Sample quotes array to hold quote objects
 let quotes = [];
 
 // Initialize the application
-function initialize() {
-    loadQuotes();
+async function initialize() {
+    await loadQuotes();
     populateCategories();
     filterQuotes();
     fetchQuotesFromServer();
 }
 
 // Load existing quotes from local storage
-function loadQuotes() {
+async function loadQuotes() {
     const storedQuotes = JSON.parse(localStorage.getItem('quotes'));
     if (storedQuotes) {
         quotes = storedQuotes;
@@ -100,22 +100,23 @@ function exportToJsonFile() {
 }
 
 // Fetch quotes from the server
-function fetchQuotesFromServer() {
-    setInterval(() => {
-        fetch('https://jsonplaceholder.typicode.com/posts') // Simulated API endpoint
-            .then(response => response.json())
-            .then(data => {
-                // Simulate adding new quotes from the server
-                const newQuotes = data.map(post => ({
-                    text: post.title,  // Using post title as quote text
-                    category: 'fetched' // Assign a static category for demonstration
-                }));
-                quotes.push(...newQuotes);
-                saveQuotes();
-                populateCategories();
-                showRandomQuote();
-            })
-            .catch(error => console.error('Error fetching quotes:', error));
+async function fetchQuotesFromServer() {
+    setInterval(async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Simulated API endpoint
+            const data = await response.json();
+            // Simulate adding new quotes from the server
+            const newQuotes = data.map(post => ({
+                text: post.title,  // Using post title as quote text
+                category: 'fetched' // Assign a static category for demonstration
+            }));
+            quotes.push(...newQuotes);
+            saveQuotes();
+            populateCategories();
+            showRandomQuote();
+        } catch (error) {
+            console.error('Error fetching quotes:', error);
+        }
     }, 30000); // Fetch every 30 seconds
 }
 
