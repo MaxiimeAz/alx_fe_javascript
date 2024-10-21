@@ -8,6 +8,7 @@ async function initialize() {
     filterQuotes();
     fetchQuotesFromServer();
     syncQuotes(); // Start syncing quotes with the server
+    createAddQuoteForm(); // Create the add quote form
 }
 
 // Load existing quotes from local storage
@@ -31,6 +32,36 @@ function showRandomQuote() {
     }
     const randomIndex = Math.floor(Math.random() * quotes.length);
     document.getElementById('quoteDisplay').innerHTML = `<p>${quotes[randomIndex].text}</p><small>${quotes[randomIndex].category}</small>`;
+}
+
+// Create the form for adding new quotes
+function createAddQuoteForm() {
+    const formContainer = document.getElementById('quoteFormContainer'); // Ensure you have this element in your HTML
+
+    const form = document.createElement('form');
+    form.id = 'quoteForm';
+    form.onsubmit = (event) => addQuote(event);
+
+    const quoteInput = document.createElement('input');
+    quoteInput.id = 'newQuoteText';
+    quoteInput.type = 'text';
+    quoteInput.placeholder = 'Enter a new quote';
+    quoteInput.required = true;
+
+    const categoryInput = document.createElement('input');
+    categoryInput.id = 'newQuoteCategory';
+    categoryInput.type = 'text';
+    categoryInput.placeholder = 'Enter quote category';
+    categoryInput.required = true;
+
+    const addButton = document.createElement('button');
+    addButton.type = 'submit';
+    addButton.textContent = 'Add Quote';
+
+    form.appendChild(quoteInput);
+    form.appendChild(categoryInput);
+    form.appendChild(addButton);
+    formContainer.appendChild(form);
 }
 
 // Add a new quote
